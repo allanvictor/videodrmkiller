@@ -31,7 +31,7 @@ class Bot():
         self.browser.find_element_by_xpath(elementxpath).click()
     def startRecordVideo(self, outputvideo):
         print ('--start recording--')
-        self.record_proccess = Popen('/usr/bin/ffmpeg -y -f x11grab -video_size 1920x1080 -probesize 48M -i :1 -f pulse -ac 2 -i default '+outputvideo, shell=True)
+        self.record_proccess = Popen('/usr/bin/ffmpeg -y -f x11grab -video_size 1920x1080  -probesize 48M -i :1 -f pulse -ac 2 -i default -c:v libx264 -preset superfast -crf 18 -pix_fmt yuv420p '+outputvideo, shell=True)
     def calculateVideotime(self, videotime):
         self.videotime = self.browser.find_element_by_xpath(videotime)
         self.videotime = self.videotime.get_attribute('innerHTML')
@@ -44,7 +44,7 @@ class Bot():
 
 if __name__ == '__main__':
     bot = Bot()
-    bot.enterSite('https://www.example.com')
+    bot.enterSite('https://site.teste.com.br')
     elements = []
     # play button
     playvideobutton = '/html/body/div/div/div/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div[3]/div/button/div'
@@ -59,6 +59,6 @@ if __name__ == '__main__':
     bot.waitElementLoad(elements[0])
     for button in elements:
         bot.clickButton(button)
-    bot.startRecordVideo('video.mkv')
+    bot.startRecordVideo('video3.mkv')
     time.sleep(bot.calculateVideotime(videotime))
     bot.finishing()
