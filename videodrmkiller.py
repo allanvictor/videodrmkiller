@@ -14,7 +14,6 @@ from xvfbwrapper import Xvfb
 class Bot():
     def __init__(self):
         self.virtualdisplay = Xvfb(width=1920, height=1080, display=1)
-        # self.virtualdisplay.__getattribute__('newdisplay'
         self.virtualdisplay.start()
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument("--window-size=1920,1080")
@@ -38,20 +37,20 @@ class Bot():
         self.videotime = self.videotime.get_attribute('innerHTML')
         self.videotime = datetime.strptime(self.videotime,'%M:%S')
         return self.videotime.second + self.videotime.minute*60 + self.videotime.hour*3600
-        
-        
     def finishing(self):
         print ('--stop recording--')
         os.kill(self.record_proccess.pid, signal.SIGINT)
-        # os.kill(recordvideo.pid, signal.SIGINT)
         self.virtualdisplay.stop()
 
 if __name__ == '__main__':
     bot = Bot()
-    bot.enterSite('https://bitmovin.com/demos/drm')
+    bot.enterSite('https://www.example.com')
     elements = []
+    # play button
     playvideobutton = '/html/body/div/div/div/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div[3]/div/button/div'
+    # unmute video
     audiobutton = '/html/body/div/div/div/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div[5]/div/div[3]/div/button[2]'
+    # fullscreen button
     fullscreenbutton = '/html/body/div/div/div/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div[5]/div/div[3]/div/button[8]'
     videotime = '/html/body/div/div/div/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div[5]/div/div[2]/div/span[2]'
     elements.append(playvideobutton)
@@ -60,6 +59,6 @@ if __name__ == '__main__':
     bot.waitElementLoad(elements[0])
     for button in elements:
         bot.clickButton(button)
-    bot.startRecordVideo('/home/allanvictor/Documentos/myprojects/seleniumbot/videobobo.mkv')
+    bot.startRecordVideo('video.mkv')
     time.sleep(bot.calculateVideotime(videotime))
     bot.finishing()
